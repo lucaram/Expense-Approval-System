@@ -1,0 +1,360 @@
+openapi: 3.0.3
+
+info:
+  title: Expense Approval System API
+  version: 1.0.0
+  description: API for creating, submitting, approving, rejecting, and viewing expense claims.
+
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /api/expenses:
+    post:
+      summary: Create an expense
+      description: Creates a new expense claim. A successfully created expense always starts in DRAFT status.
+      tags:
+        - Expenses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpenseInput'
+            example:
+              employee: Marco
+              description: Books
+              amount: 10
+              expenseDate: 2026-09-22
+      responses:
+        '201':
+          description: Expense created successfully with DRAFT status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+              example:
+                id: 6
+                employee: Marco
+                description: Books
+                amount: 10
+                expenseDate: 2026-09-22
+                status: DRAFT
+
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              example:
+                errors:
+                  - Description is required.
+                  - Amount must be greater than zero.
+                  - Expense date is required.
+
+  /api/expenses/{id}:
+    get:
+      summary: Get an expense by ID
+      description: Returns the current details and status of an existing expense.
+      tags:
+        - Expenses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Expense ID
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Expense found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+              example:
+                id: 6
+                employee: Marco
+                description: Books
+                amount: 10
+                expenseDate: 2026-09-22
+                status: SUBMITTED
+
+        '400':
+          description: Invalid expense ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Invalid expense id.
+
+        '404':
+          description: Expense not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Expense not found.
+
+  /api/expenses/{id}/submit:
+    post:
+      summary: Submit a draft expense
+      description: >
+        Submits an expense for approval.
+        The expense must currently be in DRAFT status.
+        On success, the expense status becomes SUBMITTED.
+      tags:
+        - Expenses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Expense ID
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Expense submitted successfully. Status changed from DRAFT to SUBMITTED.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+              example:
+                id: 6
+                employee: Marco
+                description: Books
+                amount: 10
+                expenseDate: 2026-09-22
+                status: SUBMITTED
+
+        '400':
+          description: Invalid expense ID or expense is not in DRAFT status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidId:
+                  summary: Invalid expense ID
+                  value:
+                    error: Invalid expense id.
+
+                invalidTransition:
+                  summary: Expense is not in DRAFT status
+                  value:
+                    error: Only DRAFT expenses can be submitted.
+
+        '404':
+          description: Expense not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Expense not found.
+
+  /api/expenses/{id}/approve:
+    post:
+      summary: Approve a submitted expense
+      description: >
+        Approves an expense claim.
+        The expense must currently be in SUBMITTED status.
+        On success, the expense status becomes APPROVED.
+      tags:
+        - Expenses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Expense ID
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Expense approved successfully. Status changed from SUBMITTED to APPROVED.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+              example:
+                id: 6
+                employee: Marco
+                description: Books
+                amount: 10
+                expenseDate: 2026-09-22
+                status: APPROVED
+
+        '400':
+          description: Invalid expense ID or expense is not in SUBMITTED status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidId:
+                  summary: Invalid expense ID
+                  value:
+                    error: Invalid expense id.
+
+                invalidTransition:
+                  summary: Expense is not in SUBMITTED status
+                  value:
+                    error: Only SUBMITTED expenses can be approved.
+
+        '404':
+          description: Expense not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Expense not found.
+
+  /api/expenses/{id}/reject:
+    post:
+      summary: Reject a submitted expense
+      description: >
+        Rejects an expense claim.
+        The expense must currently be in SUBMITTED status.
+        On success, the expense status becomes REJECTED.
+      tags:
+        - Expenses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Expense ID
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Expense rejected successfully. Status changed from SUBMITTED to REJECTED.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+              example:
+                id: 7
+                employee: Nadia
+                description: Hotel
+                amount: 120
+                expenseDate: 2026-09-22
+                status: REJECTED
+
+        '400':
+          description: Invalid expense ID or expense is not in SUBMITTED status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidId:
+                  summary: Invalid expense ID
+                  value:
+                    error: Invalid expense id.
+
+                invalidTransition:
+                  summary: Expense is not in SUBMITTED status
+                  value:
+                    error: Only SUBMITTED expenses can be rejected.
+
+        '404':
+          description: Expense not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Expense not found.
+
+components:
+  schemas:
+    CreateExpenseInput:
+      type: object
+      required:
+        - employee
+        - description
+        - amount
+        - expenseDate
+      properties:
+        employee:
+          type: string
+          example: Marco
+        description:
+          type: string
+          example: Books
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+          example: 10
+        expenseDate:
+          type: string
+          format: date
+          example: 2026-09-22
+
+    Expense:
+      type: object
+      required:
+        - id
+        - employee
+        - description
+        - amount
+        - expenseDate
+        - status
+      properties:
+        id:
+          type: integer
+          example: 6
+        employee:
+          type: string
+          example: Marco
+        description:
+          type: string
+          example: Books
+        amount:
+          type: number
+          format: double
+          example: 10
+        expenseDate:
+          type: string
+          format: date
+          example: 2026-09-22
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - SUBMITTED
+            - APPROVED
+            - REJECTED
+          example: DRAFT
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: Expense not found.
+
+    ValidationError:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+          example:
+            - Description is required.
+            - Amount must be greater than zero.
+            - Expense date is required.

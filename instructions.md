@@ -253,6 +253,58 @@ test the UI with two new entries:
 Create → DRAFT → Submit → SUBMITTED → Approve → APPROVED
 Create → DRAFT → Submit → SUBMITTED → Reject → REJECTED
 
+## IMPLEMENT OPENAPI 3 & SWAGGER
+
+OpenAPI 3 = the formal, machine-readable API contract describing endpoints, inputs, outputs, status codes, and schemas.
+
+Swagger UI = the interactive web page that reads the OpenAPI file and lets you view and manually test the API.
+
+- From Expense-Approval-System/backend:
+
+npm install swagger-ui-express yaml
+(displays Swagger UI through Express, it reads our openapi.yaml file)
+
+npm install --save-dev @types/swagger-ui-express
+(TypeScript definitions for swagger-ui-express)
+
+- backend/openapi.yaml
+(you must create this OpenAPI specification file)
+
+- update backend\src\server.ts to wire Swagger UI into your Express server. 
+
+it loads openapi.yaml and exposes Swagger UI at: 
+http://localhost:3001/api-docs. 
+Swagger UI is useful because it lets you manually exercise the API without curl.
+
+Start with the simplest endpoint:
+
+Expand GET /api/expenses/{id}
+Click Try it out
+
+Enter an existing expense ID, for example:
+
+1
+Click Execute
+
+You should see:
+
+Request URL: http://localhost:3001/api/expenses/1
+Response code: 200
+Response body with the expense JSON
+
+the first 200 response: it's actual runtime result
+the second 200 response: it's documented possible response
+
+try the 5 APIs (remember that running the same request twice it won't work because of the status).
+
+The most popular response codes are:
+
+200 = successful action
+201 = expense created
+400 = invalid input / invalid transition
+404 = expense not found
+500 = unexpected backend error
+
 ## CREATE GITHUB REPO AND PUSH FROM LOCAL MACHINE TO REMOTE
 
 - create .gitignore at the project root (it will apply to everything, both frontend and backend).
@@ -292,3 +344,9 @@ push = where Git uploads your commits to
 
 - git push -u origin main
 (Uploads your local main branch to GitHub (origin) and links it so future pushes can simply use git push.)
+
+- For pushing change from, local to github the usual commands are:
+git status
+git add .
+git commit -m "Insert Comment"
+git push
