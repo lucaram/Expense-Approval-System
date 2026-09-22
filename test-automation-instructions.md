@@ -46,6 +46,12 @@ git commit -m "Set up test automation framework"
 git push -u origin feature/test-automation 
 (after that, from your local laptop feature branch, you can only run git push)
 
+git switch main
+(it switches to main branch)
+
+git switch feature/test-automation
+(it switches to test-automation feature branch)
+
 ## Create Test Strategy / Test Plan
 
 create docs\test-strategy.md
