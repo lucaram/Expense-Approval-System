@@ -1,3 +1,5 @@
+## CREATE PROJECT AND INITIATE GIT
+
 1. create project folder: 
    - Expense-Approval-System
 
@@ -5,6 +7,8 @@
    - git init >>> initialise this folder as local git repo
    - git branch -M main >>> current default branch is named "main"
    - git status >>> confirms you are on main branch
+
+## FOLDER STRUCTURE, REQUIREMENTS, GOLDEN SHEET, ARCHITECTURE, FRONTEND/BACKEND BUILD INCLUDING DATABASE AND APIs
 
 3. create the initial project skeleton:
    - mkdir frontend backend requirements docs tests
@@ -202,10 +206,9 @@ Create a new Next.js frontend project in frontend folder, using TypeScript, ESLi
   {"error":"Only SUBMITTED expenses can be rejected."}
 
   
-  - FRONT END (complete skeleton)
-  Step 17: complete AC-005 — View status. 
-  You already have GET /api/expenses/:id, so the backend essentially supports it.
-  Step 17 should now be about exposing that status in the frontend, so we need to go to the Frontend folder and create frontend\app\page.tsx
+  6) FRONT END (complete skeleton)
+  complete AC-005 — View status. 
+  You already have GET /api/expenses/:id, so the backend essentially supports it. This step should now be about exposing that status in the frontend, so we need to go to the Frontend folder and create frontend\app\page.tsx
   
   Then open up another terminal:
   cd frontend
@@ -250,7 +253,7 @@ test the UI with two new entries:
 Create → DRAFT → Submit → SUBMITTED → Approve → APPROVED
 Create → DRAFT → Submit → SUBMITTED → Reject → REJECTED
 
-## FRONTEND & BACKEND BUILD IS NOW COMPLETED
+## CREATE GITHUB REPO AND PUSH FROM LOCAL MACHINE TO REMOTE
 
 - create .gitignore at the project root (it will apply to everything, both frontend and backend).
 
@@ -277,3 +280,15 @@ origin = the name of the remote github repo
 fetch = where Git downloads changes from
 push = where Git uploads your commits to
 -v = verbose, so it shows the actual URLs
+
+- git status
+(shows in which branch you are, currently main, and the untracked files in red)
+
+- git add .
+(tages all current changes in the project for the next commit.)
+
+- git commit -m "Initial MVP implementation"
+(Creates a local Git snapshot with that message.)
+
+- git push -u origin main
+(Uploads your local main branch to GitHub (origin) and links it so future pushes can simply use git push.)
