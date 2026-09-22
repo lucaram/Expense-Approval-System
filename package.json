@@ -1,0 +1,36 @@
+{
+  "name": "expense-approval-system",
+  "version": "1.0.0",
+  "description": "End-to-end expense approval system with automated testing.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test tests/API",
+    "test:ui": "playwright test tests/UI",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucaram/Expense-Approval-System.git"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "quality-engineering",
+    "expense-approval"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucaram/Expense-Approval-System/issues"
+  },
+  "homepage": "https://github.com/lucaram/Expense-Approval-System#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2",
+    "dotenv": "^18.0.3",
+    "typescript": "^7.0.2"
+  }
+}
