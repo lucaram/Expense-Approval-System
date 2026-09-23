@@ -39,7 +39,9 @@ git switch -c feature/test-automation
 git branch
 (verify you are on the branch)
 
-remember: you are in your local laptop test-automation feature branch now. If you want to push the changes in github test-automation feature branch you still have to add, commit and push:
+REMEMBER! 
+you are in your local laptop test-automation feature branch now. 
+If you want to push the changes in github test-automation feature branch you still have to add, commit and push:
 
 git add .
 git commit -m "Set up test automation framework"
@@ -52,8 +54,10 @@ git switch main
 git switch feature/test-automation
 (it switches to test-automation feature branch)
 
-REMEMBER: BEFORE SWITCHING YOU NEED TO COMMIT YOUR CHANGES TO KEEP THEM IN YOUR FEATURE BRANCHES. IF YOU DON'T, GIT WILL ABORT THE SWITCH TO PROTECT YOUR WORK.
+REMEMBER!
+BEFORE SWITCHING YOU NEED TO COMMIT YOUR CHANGES TO KEEP THEM IN YOUR FEATURE BRANCHES. IF YOU DON'T, GIT WILL ABORT THE SWITCH TO PROTECT YOUR WORK.
 
+from project root:
 git add .
 git commit -m "Update test automation configuration"
 git switch main
