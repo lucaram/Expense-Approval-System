@@ -1,6 +1,8 @@
 import Database from 'better-sqlite3';
 
-const db = new Database('expenses.db');
+const databasePath = process.env.DB_PATH || 'expenses.db';
+
+const db = new Database(databasePath);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS expenses (
