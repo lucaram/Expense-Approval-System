@@ -412,13 +412,14 @@ export default function Home() {
                 </h2>
               </div>
 
-              <span
-                className={`rounded-full border px-3 py-1 text-sm font-bold ${getStatusStyle(
-                  expense.status
-                )}`}
-              >
-                {expense.status}
-              </span>
+<span
+  role="status"
+  className={`rounded-full border px-3 py-1 text-sm font-bold ${getStatusStyle(
+    expense.status
+  )}`}
+>
+  {expense.status}
+</span>
             </div>
 
             <div className="grid gap-6 p-6 sm:grid-cols-2">

@@ -6,6 +6,8 @@ dotenv.config({ path: '.env.test' });
 export default defineConfig({
   testDir: './tests',
 
+  testIgnore: ['**/unit/**'],
+
   fullyParallel: true,
 
   retries: process.env.CI ? 2 : 0,
