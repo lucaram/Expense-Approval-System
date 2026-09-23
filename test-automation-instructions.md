@@ -52,6 +52,22 @@ git switch main
 git switch feature/test-automation
 (it switches to test-automation feature branch)
 
+REMEMBER: BEFORE SWITCHING YOU NEED TO COMMIT YOUR CHANGES TO KEEP THEM IN YOUR FEATURE BRANCHES. IF YOU DON'T, GIT WILL ABORT THE SWITCH TO PROTECT YOUR WORK.
+
+git add .
+git commit -m "Update test automation configuration"
+git switch main
+
+
+Optionally (not required, just for knowledge), you can keep the changes temporarily without committing:
+git stash >>> temporarily hide/save changes
+git switch main
+
+then later:
+git switch feature/test-automation
+git stash pop >>> bring them back
+
+
 ## Create Test Strategy / Test Plan
 
 create docs\test-strategy.md
@@ -139,3 +155,35 @@ in project root install:
 npm install --save-dev dotenv
 
 then update playwright.config.ts so that env variables can be used.
+
+## Test data / DB reset strategy
+
+Our goal is:
+
+Development → backend/expenses.db >>> which we already have
+Testing     → backend/expenses-test.db >>> which we need to create
+
+so automated tests never modify your normal development data.
+
+update backend\src\db.ts where: 
+const databasePath = process.env.DB_PATH || 'expenses.db'; 
+(it means: If DB_PATH is provided → use that database, otherwise use expenses.db)
+
+then update .env.test with the environment variable for your new test database:
+DB_PATH=expenses-test.db
+
+Next, we should add the DB reset mechanism so automated tests can start from a clean state.
+
+Create: backend/src/resetTestDb.ts
+
+then add this script in backend/package.json: 
+"reset:test-db": "tsx src/resetTestDb.ts"
+
+from backend folder run:
+DB_PATH=expenses-test.db npm run reset:test-db
+
+it should say: Test database reset complete.
+it should create: backend/expenses-test.db with 0 rows.
+
+To ignore the test database in git, in project root .gitignore, add: 
+backend/expenses-test.db
