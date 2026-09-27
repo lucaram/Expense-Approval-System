@@ -622,3 +622,108 @@ then push it to the
 git add .
 git commit -m "Add CI test workflow"
 git push origin feature/test-automation
+
+once you push the code, then go to github/actions and you will see the Test workflow running and passing .
+(it will take a couple of minutes because it needs to install playwright dependencies, this is expected each time because GitHub-hosted runners are ephemeral, each new job starts from a clean machine).
+
+
+the .github\workflows\test.yml makes the CI to run when:
+git push happens >>> first CI run
+PR is oppen >>> second CI ruun
+code in merged into main >>> third CI run
+
+
+thats the normal flow:
+
+Make changes locally
+↓
+git add .
+↓
+git commit -m "..."
+↓
+git push origin feature/test-automation
+↓
+GitHub Actions runs on the feature branch
+↓
+If CI passes, open PR:
+feature/test-automation → main
+↓
+GitHub Actions runs again for the PR
+↓
+Reviewer reviews the PR
+↓
+If required, reviewer approves
+↓
+Merge PR into main
+↓
+GitHub Actions runs again on main because main is also in the push trigger
+
+
+# PR + Review & merge to main
+
+For your branch feature/test-automation, the flow is:
+
+feature/test-automation
+        ↓
+Open Pull Request
+        ↓
+Target branch = main
+        ↓
+CI runs again for the PR
+        ↓
+Review changed files
+        ↓
+Address comments if needed
+        ↓
+Approve PR
+        ↓
+Merge to main
+
+
+
+what to run:
+
+1. Finish updating:
+   Training/test-automation-instructions.md
+
+2. Save the file
+
+3. Check what changed:
+   git status
+
+4. Review the actual diff: 
+   git diff
+
+5. Stage everything you want in the PR:
+   git add .
+
+6. Check staged changes:
+   git status
+
+7. Commit:
+   git commit -m "Complete test automation training and CI setup"
+
+8. Push your feature branch:
+   git push origin feature/test-automation
+
+9. Go to GitHub
+   → Pull requests
+   → New pull request
+
+10. Set:
+    base: main
+    compare: feature/test-automation
+
+11. Create the PR
+
+12. Wait for GitHub Actions to run on the PR
+
+13. Review:
+    - CI result
+    - Files changed
+    - PR description
+    - any comments
+
+14. Approve / address comments
+
+15. Merge into main
