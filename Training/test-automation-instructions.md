@@ -705,6 +705,7 @@ what to run:
 
 8. Push your feature branch:
    git push origin feature/test-automation
+   (this is the first CI run, the context is feature/test-automation branch commit)
 
 9. Go to GitHub
    → Pull requests
@@ -714,7 +715,8 @@ what to run:
     base: main
     compare: feature/test-automation
 
-11. Create the PR
+11. Create the PR:
+    (this is the second CI run, the context is Main + feature/test-automation changes)
 
 12. Wait for GitHub Actions to run on the PR
 
@@ -727,3 +729,4 @@ what to run:
 14. Approve / address comments
 
 15. Merge into main
+    (this is the 3rd CI run, the context is real main branch after the merge)
