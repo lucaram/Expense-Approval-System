@@ -708,7 +708,7 @@ what to run:
 
 9. Go to GitHub
    → Pull requests
-   → New pull request
+   → Compare and pull request
 
 10. Set:
     base: main
