@@ -398,3 +398,227 @@ it will do:
 1. reset backend/expenses-test.db
 2. return to project root
 3. run all Playwright UI tests
+
+
+TEST EXECUTION SUMMARY:
+
+- To run unit tests, from root: 
+  npm run test:unit 
+- To run Playwright API tests, from root:
+  npm run test:api 
+- To run Playwright UI/E2E test, from root: 
+  npm run test:ui 
+
+to see what these scripts run, take a look at package.json scripts section.
+
+Data:
+- Unit: no database reset required.
+- API: backend/expenses-test.db is reset automatically before execution via backend\src\resetTestDb.ts
+- UI/E2E: backend/expenses-test.db is reset automatically before execution via backend\src\resetTestDb.ts
+
+Environments:
+- from frontend folder: npm run dev
+- from backend folder: DB_PATH=expenses-test.db npm run dev (it uses test.DB)
+
+Now you are ready for agent customisation
+
+
+## Agent Customisation
+
+Codex chat > settings > workplace (project related) or user (all project related)
+
+Instructions → define the project-wide rules the AI should follow when working on test automation.
+
+Agent → defines the specialised QE role: what it is responsible for and how it should behave.
+
+Skills → reusable procedures for specific tasks, e.g. test design, Jest implementation, Playwright implementation, failure triage.
+
+MCP server → gives the agent extra capabilities/tools, e.g. Playwright MCP lets it interact with the local browser/app.
+
+Hooks → automatic guardrails/actions triggered around tool usage, e.g. blocking use of expenses.db.
+
+Prompts → reusable commands you invoke for specific workflows, e.g. analyse coverage gaps, implement next test, triage a failure.
+
+
+
+REMEMBER!
+if you have playwright MCP server, in your agent you need to specify playwright as well in tools
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'todo', 'playwright/*']
+
+Also, in your instructions, make it applyTo: "**" 
+(initially it was set as apply to "tests/**")
+
+This is because it not only looks inside /tests folder, but can also look inside other places:
+
+docs/test-traceability.md
+backend source
+frontend source
+Jest/Playwright configs
+package.json
+.env.test
+
+
+## Agent-assisted coverage expansion
+
+run prompt:
+/analyse-coverage-gaps
+
+read the reply, understand it, it says:
+"The most valuable next addition is:
+Playwright API: “reject a submitted expense and assert REJECTED status with 200”
+This single test immediately closes the largest missing coverage gap and naturally supports the follow-up invalid-terminal-state test."
+
+ then run the prompt:
+/implement-next-test with this text below:
+Implement the smallest useful next test identified in the latest coverage analysis:
+Playwright API — reject a submitted expense and assert HTTP 200 and status REJECTED.
+Use the lowest reliable test layer.
+Run the relevant test suite.
+Update docs/test-traceability.md if coverage changes.
+
+it will create the test and update the test-traceability (verify the output with chatgpt to make small changes to AC or BR or the above mentioned prompts as traceability may be tricky and absolute clarity is needed).
+
+
+then repeat the cycle: 
+/analyse-coverage-gaps
+
+Why? Because the coverage state has changed. The agent should now reassess the repository and recommend the next smallest meaningful gap based on the updated test suite and traceability.
+
+for the same reason, then execute:
+/implement-next-test
+
+
+So your state is now:
+
+Positive reject flow                 ✅
+Reject DRAFT                         ✅
+Rejected terminal behaviour          ❌
+Approved terminal behaviour          ❌
+Dedicated GET/status                 ❌
+Negative amount                      ❌
+Required-field matrix/API checks     ❌
+UI reject workflow                   ❌
+
+Now you can repeat the patter test by test
+
+/analyse-coverage-gaps
+→ review recommendation
+/implement-next-test
+→ review test + traceability
+repeat
+
+Then, once the trusted behaviour is applied, later on you can add a prompt that does it all in one go.
+
+You don't need to update it one at a time, you can add a script at a certain point to implement "remaining minimum tests required to ensure coverage".
+
+in the end we have coverage applied:
+
+AC-001 ✅
+AC-002 ✅
+AC-003 ✅
+AC-004 ✅
+AC-005 ✅
+
+BR-001 ✅
+BR-002 ✅
+BR-003 ✅
+BR-004 ✅
+BR-005 ✅
+BR-006 ✅
+BR-007 ✅
+
+At this point, I would consider the coverage-expansion phase complete. The next logical lifecycle step is the full regression run.
+
+
+## full regression
+
+in root package.json we have this script:
+"test": "npm run test:unit && npm run test:api && npm run test:ui"
+
+therefore to run full regression (unit / api / ui) we need to execute:
+npm run test
+
+check whether all the tests of the regression pack pass.
+
+then run:
+git diff --check
+
+It checks the differences between your current files and the last committed version, looking mainly for formatting/whitespace problems such as trailing spaces or suspicious whitespace in changed lines. if no message appears after execution, it silently passes and no whitespace problems was found.
+
+## test report:
+
+for Jest Unit testing run:
+npm run test:unit:coverage
+
+1) UNIT TESTING
+
+Unit testing report, run:
+npm run test:unit
+
+then in project root, under test-results, you will need to open:
+unit-test-report.html
+
+
+
+unit testing coverage, run:
+npm run test:unit:coverage
+
+then in project root, under test-results/coverage, you will need to open:
+index.html
+
+2) PLAYWRIGHT API + UI TESTING
+
+update package.json script and run:
+npm run test:api-ui
+
+then open the playwright report:
+npm run test:report
+
+
+Optionally, fore UI tests only, you can attach screenshot evidence in your Playwright report by adding screenshots evidence in your Playwright scripts.
+
+
+
+# CI
+
+Every push / pull request automatically installs dependencies and runs the same regression you just ran locally (unit / API / UI are run with: npm run test).
+
+what you need to do:
+
+1. Configure Playwright so it can start the frontend/backend automatically
+2. Create the GitHub Actions YAML file locally
+3. Commit/push it
+4. Then GitHub Actions will run automatically
+
+we can already do everything, expect for step 1. You need to update:
+playwright.config.ts
+
+so that it runs both frontend and backend servers. in this way the flow for step 1 will be:
+
+playwright test
+      ↓
+start backend automatically
+      ↓
+wait for backend
+      ↓
+start frontend automatically
+      ↓
+wait for frontend
+      ↓
+run API/UI tests
+      ↓
+stop servers when finished
+
+
+
+now create the Github Actions workflow:
+.github/workflows/test.yml
+
+this will run unit tests, API tests, UI tests.
+
+
+
+then push it to the 
+git add .
+git commit -m "Add CI test workflow"
+git push origin feature/test-automation

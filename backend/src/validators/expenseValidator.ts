@@ -1,7 +1,7 @@
-import type { CreateExpenseInput } from '../models/expense.js';
+import type { CreateExpenseValidationInput } from '../models/expense.js';
 
 export function validateCreateExpense(
-  expense: CreateExpenseInput
+  expense: CreateExpenseValidationInput
 ): string[] {
   const errors: string[] = [];
 

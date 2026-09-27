@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('cannot create an expense when description is missing', async ({ page }) => {
+test('cannot create an expense when description is missing', async ({ page }, testInfo) => {
   await page.goto('/');
 
   await page.getByLabel('Employee').fill('Luca');
@@ -8,7 +8,6 @@ test('cannot create an expense when description is missing', async ({ page }) =>
   // Description deliberately left empty.
 
   await page.getByLabel('Amount (£)').fill('25');
-
   await page.getByLabel('Expense Date').fill('2026-09-23');
 
   await page.getByRole('button', { name: 'Create Expense' }).click();
@@ -16,4 +15,9 @@ test('cannot create an expense when description is missing', async ({ page }) =>
   await expect(
     page.getByRole('alert').filter({ hasText: 'Description is required.' })
   ).toHaveText('Description is required.');
+
+  await testInfo.attach('Missing description validation UI', {
+    body: await page.screenshot({ fullPage: true }),
+    contentType: 'image/png',
+  });
 });

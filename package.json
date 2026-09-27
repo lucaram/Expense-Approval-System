@@ -4,15 +4,16 @@
   "description": "End-to-end expense approval system with automated testing.",
   "private": true,
   "type": "module",
-  "scripts": {
-    "test": "npm run test:unit && npm run test:api && npm run test:ui",
-    "test:unit": "jest",
-    "test:unit:coverage": "jest --coverage",
-    "test:api": "cd backend && cross-env DB_PATH=expenses-test.db npm run reset:test-db && cd .. && playwright test tests/API",
-    "test:ui": "cd backend && cross-env DB_PATH=expenses-test.db npm run reset:test-db && cd .. && playwright test tests/UI",
-    "test:headed": "playwright test --headed",
-    "test:report": "playwright show-report"
-  },
+"scripts": {
+  "test": "npm run test:unit && npm run test:api-ui",
+  "test:unit": "jest",
+  "test:unit:coverage": "jest --coverage",
+  "test:api": "cd backend && cross-env DB_PATH=expenses-test.db npm run reset:test-db && cd .. && playwright test tests/API",
+  "test:ui": "cd backend && cross-env DB_PATH=expenses-test.db npm run reset:test-db && cd .. && playwright test tests/UI",
+  "test:api-ui": "cd backend && cross-env DB_PATH=expenses-test.db npm run reset:test-db && cd .. && playwright test tests/API tests/UI",
+  "test:headed": "playwright test --headed",
+  "test:report": "playwright show-report"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lucaram/Expense-Approval-System.git"

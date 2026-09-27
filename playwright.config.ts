@@ -6,7 +6,7 @@ dotenv.config({ path: '.env.test' });
 export default defineConfig({
   testDir: './tests',
 
-  testIgnore: ['**/unit/**'],
+  testIgnore: ['**/UNIT/**'],
 
   fullyParallel: true,
 
@@ -21,6 +21,22 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
+
+  webServer: [
+{
+  command:
+    'cross-env DB_PATH=expenses-test.db npm --prefix backend start',
+  url: `${process.env.API_BASE_URL}/api-docs`,
+  reuseExistingServer: !process.env.CI,
+  timeout: 120_000,
+},
+    {
+      command: 'npm --prefix frontend run dev',
+      url: process.env.FRONTEND_BASE_URL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 
   projects: [
     {

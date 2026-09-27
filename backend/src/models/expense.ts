@@ -19,3 +19,10 @@ export interface CreateExpenseInput {
   amount: number;
   expenseDate: string;
 }
+
+export interface CreateExpenseValidationInput {
+  employee?: string;
+  description?: string;
+  amount?: number | null;
+  expenseDate?: string;
+}

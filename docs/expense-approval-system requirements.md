@@ -75,6 +75,7 @@ Then the current status is displayed.
 
 ## Validation
 
+- Employee is mandatory.
 - Description is mandatory.
 - Amount is mandatory.
 - Amount must be greater than zero.
