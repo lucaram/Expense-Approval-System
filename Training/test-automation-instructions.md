@@ -748,3 +748,21 @@ git switch main
 
 git pull origin main
 (This updates your local main with the merged changes from GitHub)
+
+
+17. optionally, delete the feature branch:
+- from your local laptop
+- from your github 
+
+FROM LOCAL LAPTOP
+First switch away from the feature branch, because Git will not let you delete the branch you are currently on:
+git switch main
+
+Then delete the local feature branch:
+git branch -d feature/test-automation
+(The lowercase -d is the safe delete. Git will refuse if it thinks the branch contains unmerged work.)
+
+
+FROM GITHUB
+To delete the GitHub remote branch too, run:
+git push origin --delete feature/test-automation
