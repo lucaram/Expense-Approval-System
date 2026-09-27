@@ -14,7 +14,7 @@
    - mkdir frontend backend requirements docs tests
    
    create these files: 
-   - requirements\expense-approval.md
+   - docs\expense-approval-system requirements.md
    - docs\domain-invariants.md (GOLDEN SHEET)
    - docs\feature-architecture.md
    - docs\test-automation-architecture.md

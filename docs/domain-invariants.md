@@ -26,6 +26,7 @@ Once an expense reaches `APPROVED` or `REJECTED`, its status must not change aga
 
 An expense claim cannot be created without:
 
+- employee
 - description
 - amount
 - expense date

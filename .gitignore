@@ -20,8 +20,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Local SQLite database
+# Local SQLite dev database
 backend/expenses.db
+
+# local SQLite test database
+backend/expenses-test.db
 
 # Test reports / coverage
 coverage/
@@ -34,3 +37,5 @@ Thumbs.db
 
 # VS Code local settings
 .vscode/
+
+backend/expenses-test.db

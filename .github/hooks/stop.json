@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "node .github/hooks/qe-stop-check.cjs",
+        "timeout": 10
+      }
+    ]
+  }
+}
