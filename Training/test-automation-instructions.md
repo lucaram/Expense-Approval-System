@@ -726,7 +726,25 @@ what to run:
     - PR description
     - any comments
 
+REMEMBER!
+when reviewing, check on "file changed", you can tick view / review each file and submit a comment / approve a PR
+
 14. Approve / address comments
 
 15. Merge into main
     (this is the 3rd CI run, the context is real main branch after the merge)
+
+REMEMBER!
+- once you successfully merge a file, the pull request page will be empty, click on "closed" and you will see the status of the pull request
+
+- after the merge, check on GitHub actions to confirm the 3rd CI has completed successfully.
+
+
+16. now github main has the latest changes.
+your local repo should now sync with the updated main.
+
+Do this:
+git switch main
+
+git pull origin main
+(This updates your local main with the merged changes from GitHub)
