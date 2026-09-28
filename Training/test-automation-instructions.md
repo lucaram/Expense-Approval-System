@@ -627,7 +627,7 @@ once you push the code, then go to github/actions and you will see the Test work
 
 the .github\workflows\test.yml makes the CI to run when:
 git push happens >>> first CI run
-PR is oppen >>> second CI ruun
+PR is open >>> second CI ruun
 code in merged into main >>> third CI run
 
 
@@ -853,4 +853,28 @@ Regression            → existing + new tests run
                         (npm run test, check no error/warning messages appear)
 ↓
 Test report / CI      → updated evidence
-                        (unit test: npm run test:unit, then look test-results folder)
+                        (unit test: npm run test:unit, then look test-results folder for unit-test-report.html)
+                        (playwright test: npm run test:api-ui
+                        then run: npm run test:report)
+                       → CI
+                         git status
+                         git add .
+                         git commit -m "Add BR-008 amount boundary validation coverage"
+                         git push -u origin feature/br-008-test-coverage (in future git push)
+                         (check first CI in github actions)
+
+                         github > select the feature branch br-008-test-coverage
+                         click compare and create pull request
+                         base: main, compare: feature/br-008-test-coverage
+                         PR title: Add £10,000 expense amount limit and test coverage
+                         add a description
+                         click create pull request
+                         file changed > submit review
+                         merge pull request
+                         confirm merge.
+                         to sync local laptop comments with github:
+                         git status
+                         git add .
+                         git commit -m "Update comments"
+                         git pull --rebase origin feature/br-008-test-coverage
+                         git push
