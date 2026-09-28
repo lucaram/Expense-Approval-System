@@ -17,6 +17,8 @@ export function validateCreateExpense(
     errors.push('Amount is required.');
   } else if (typeof expense.amount !== 'number' || expense.amount <= 0) {
     errors.push('Amount must be greater than zero.');
+  } else if (expense.amount > 10000) {
+    errors.push('Amount must not exceed £10,000.');
   }
 
   if (!expense.expenseDate?.trim()) {

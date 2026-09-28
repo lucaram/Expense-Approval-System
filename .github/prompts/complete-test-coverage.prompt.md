@@ -305,15 +305,13 @@ Stop before implementing unrelated additional tests.
 
 ## Final validation
 
-When no meaningful coverage gaps remain, run the complete relevant regression:
+When no meaningful coverage gaps remain:
 
-- `npm run test:unit`
-- `npm run test:api`
-- `npm run test:ui`
+- confirm each newly added or modified test has passed in its relevant suite
+- confirm traceability reflects the current concrete evidence
+- run `git diff --check`
 
-Do not declare coverage completion if any required suite fails.
-
-Run `git diff --check`.
+Do not run the full regression suite as part of this prompt unless explicitly requested.
 
 ---
 

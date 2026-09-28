@@ -29,7 +29,8 @@ CI
 PR + review
         ↓
 Merge to main
-
+        ↓
+Change management
 
 ## Create feature branch for test-automation
 
@@ -545,10 +546,7 @@ git diff --check
 
 It checks the differences between your current files and the last committed version, looking mainly for formatting/whitespace problems such as trailing spaces or suspicious whitespace in changed lines. if no message appears after execution, it silently passes and no whitespace problems was found.
 
-## test report:
-
-for Jest Unit testing run:
-npm run test:unit:coverage
+## test report
 
 1) UNIT TESTING
 
@@ -766,3 +764,93 @@ git branch -d feature/test-automation
 FROM GITHUB
 To delete the GitHub remote branch too, run:
 git push origin --delete feature/test-automation
+
+
+# Change management
+
+So far, the system only requires:
+- Amount is mandatory
+- Amount must be greater than zero
+
+Now let's simulate a new requirement from the business:
+- Introduce a maximum expense amount of £10,000
+
+so we have a change request:
+CHG-001 — Maximum expense amount
+An employee must not be able to create an expense
+with an amount greater than £10,000.
+
+CHG-001
+Expense amount must not exceed £10,000.
+Valid boundary:   £10,000.00
+Invalid boundary: £10,000.01
+Expected invalid response: HTTP 400
+
+for API the expected behaviour would mean:
+POST /api/expenses
+
+with:
+{
+  "employee": "Luca",
+  "description": "Conference expenses",
+  "amount": 10000,
+  "expenseDate": "2026-09-28"
+}
+
+should return: 201 (created).
+
+
+but with:
+{
+  "employee": "Luca",
+  "description": "Conference expenses",
+  "amount": 10000.01,
+  "expenseDate": "2026-09-28"
+}
+
+should return 400 (bad request).
+
+with an error like this:
+{
+  "errors": [
+    "Amount must not exceed £10,000."
+  ]
+}
+
+
+overall, the flow is:
+
+Change request
+↓
+Requirements          → add maximum amount rule
+                        (update validation section: - Amount  must not exceed £10,000.)
+↓
+Domain invariants     → valid amount becomes 0 < amount <= 10,000
+                       (add new BR-008)
+↓
+Feature architecture  → validator must enforce upper boundary
+                        (updated the error handling section:amount greater than £10,000)
+↓
+Build                 → manually update backend validator
+                        (update backend\src\validators\expenseValidator.ts)
+                        (update swagger documentation in backend\openapi.yaml)
+                        manually update frontend frontend\app\page.tsx for max="10000"
+↓
+Test strategy         → boundary/negative validation now required
+                        (BR-008 is referenced, test approach/data/exit criteria updated)
+↓
+Traceability          → add BR-008
+                       (Not Covered until the agent adds the required tests)
+↓
+Automation            → agent identifies missing API coverage
+                        (create the feature branch br-008-test-coverage:
+                        git switch -c feature/br-008-test-coverage)
+                        (verify you are in the new branch: git branch)
+                        (run prompt /complete-test-coverage using QE automation agent)
+                        (tests are fine, you may notice some pointless issues like to eliminate white spaces. check where they are with git diff --check).
+↓
+Regression            → existing + new tests run
+                        (npm run test, check no error/warning messages appear)
+↓
+Test report / CI      → updated evidence
+                        (unit test: npm run test:unit, then look test-results folder)

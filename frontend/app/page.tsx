@@ -320,6 +320,7 @@ export default function Home() {
                 id="amount"
                 type="number"
                 min="0.01"
+                max="10000"
                 step="0.01"
                 value={amount}
                 onChange={(event) => setAmount(event.target.value)}
@@ -400,9 +401,10 @@ export default function Home() {
           <section className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
               <div>
-           <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-              Manager view
-            </p>
+                <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                  Manager view
+                </p>
+
                 <p className="text-sm text-slate-500">
                   Expense #{expense.id}
                 </p>
@@ -412,14 +414,14 @@ export default function Home() {
                 </h2>
               </div>
 
-<span
-  role="status"
-  className={`rounded-full border px-3 py-1 text-sm font-bold ${getStatusStyle(
-    expense.status
-  )}`}
->
-  {expense.status}
-</span>
+              <span
+                role="status"
+                className={`rounded-full border px-3 py-1 text-sm font-bold ${getStatusStyle(
+                  expense.status
+                )}`}
+              >
+                {expense.status}
+              </span>
             </div>
 
             <div className="grid gap-6 p-6 sm:grid-cols-2">

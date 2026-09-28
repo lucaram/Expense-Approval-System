@@ -81,6 +81,28 @@ describe('validateCreateExpense', () => {
     expect(errors).toContain('Amount must be greater than zero.');
   });
 
+  it('accepts an amount equal to the £10,000 maximum', () => {
+    const errors = validateCreateExpense({
+      employee: 'Luca',
+      description: 'Train ticket',
+      amount: 10000,
+      expenseDate: '2026-09-23',
+    });
+
+    expect(errors).toEqual([]);
+  });
+
+  it('returns an error when amount exceeds the £10,000 maximum', () => {
+    const errors = validateCreateExpense({
+      employee: 'Luca',
+      description: 'Train ticket',
+      amount: 10000.01,
+      expenseDate: '2026-09-23',
+    });
+
+    expect(errors).toContain('Amount must not exceed £10,000.');
+  });
+
   it('returns an error when expense date is missing', () => {
     const errors = validateCreateExpense({
       employee: 'Luca',

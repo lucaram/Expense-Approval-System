@@ -123,6 +123,11 @@ The frontend must not be treated as the authoritative enforcement layer.
 
 For example, hiding an Approve button is useful UI behaviour, but the backend must still reject an invalid approval request.
 
+The backend must also enforce expense amount boundaries, including:
+
+- amount must be greater than zero
+- amount must not exceed £10,000
+
 ## Persistence
 
 SQLite stores expense records.
@@ -137,6 +142,7 @@ The API should return appropriate errors for:
 
 - missing required fields
 - amount less than or equal to zero
+- amount greater than £10,000
 - expense not found
 - invalid status transition
 
