@@ -39,3 +39,7 @@ Allowed transitions are:
 - `APPROVED` is a terminal status and cannot transition to another status.
 - `REJECTED` is a terminal status and cannot transition to another status.
 - No other status transitions are allowed.
+
+## BR-008 — Expense amount must not exceed £10,000
+
+An expense claim cannot be created with an amount greater than £10,000.

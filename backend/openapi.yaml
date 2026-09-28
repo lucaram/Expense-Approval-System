@@ -15,6 +15,7 @@ paths:
       description: Creates a new expense claim. A successfully created expense always starts in DRAFT status.
       tags:
         - Expenses
+
       requestBody:
         required: true
         content:
@@ -26,6 +27,7 @@ paths:
               description: Books
               amount: 10
               expenseDate: 2026-09-22
+
       responses:
         '201':
           description: Expense created successfully with DRAFT status
@@ -51,6 +53,7 @@ paths:
                 errors:
                   - Description is required.
                   - Amount must be greater than zero.
+                  - Amount must not exceed £10,000.
                   - Expense date is required.
 
   /api/expenses/{id}:
@@ -59,6 +62,7 @@ paths:
       description: Returns the current details and status of an existing expense.
       tags:
         - Expenses
+
       parameters:
         - name: id
           in: path
@@ -67,6 +71,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+
       responses:
         '200':
           description: Expense found
@@ -109,6 +114,7 @@ paths:
         On success, the expense status becomes SUBMITTED.
       tags:
         - Expenses
+
       parameters:
         - name: id
           in: path
@@ -117,6 +123,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+
       responses:
         '200':
           description: Expense submitted successfully. Status changed from DRAFT to SUBMITTED.
@@ -167,6 +174,7 @@ paths:
         On success, the expense status becomes APPROVED.
       tags:
         - Expenses
+
       parameters:
         - name: id
           in: path
@@ -175,6 +183,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+
       responses:
         '200':
           description: Expense approved successfully. Status changed from SUBMITTED to APPROVED.
@@ -225,6 +234,7 @@ paths:
         On success, the expense status becomes REJECTED.
       tags:
         - Expenses
+
       parameters:
         - name: id
           in: path
@@ -233,6 +243,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+
       responses:
         '200':
           description: Expense rejected successfully. Status changed from SUBMITTED to REJECTED.
@@ -283,18 +294,23 @@ components:
         - description
         - amount
         - expenseDate
+
       properties:
         employee:
           type: string
           example: Marco
+
         description:
           type: string
           example: Books
+
         amount:
           type: number
           format: double
           minimum: 0.01
+          maximum: 10000
           example: 10
+
         expenseDate:
           type: string
           format: date
@@ -309,24 +325,30 @@ components:
         - amount
         - expenseDate
         - status
+
       properties:
         id:
           type: integer
           example: 6
+
         employee:
           type: string
           example: Marco
+
         description:
           type: string
           example: Books
+
         amount:
           type: number
           format: double
           example: 10
+
         expenseDate:
           type: string
           format: date
           example: 2026-09-22
+
         status:
           type: string
           enum:
@@ -340,6 +362,7 @@ components:
       type: object
       required:
         - error
+
       properties:
         error:
           type: string
@@ -349,6 +372,7 @@ components:
       type: object
       required:
         - errors
+
       properties:
         errors:
           type: array
@@ -357,4 +381,5 @@ components:
           example:
             - Description is required.
             - Amount must be greater than zero.
+            - Amount must not exceed £10,000.
             - Expense date is required.

@@ -236,3 +236,37 @@ test('cannot create an expense when amount is zero', async ({ request }) => {
 
   expect(errorResponse.errors).toContain('Amount must be greater than zero.');
 });
+
+test('accepts the £10,000 maximum amount and rejects values above it', async ({ request }) => {
+  const apiBaseUrl = process.env.API_BASE_URL!;
+
+  const validResponse = await request.post(`${apiBaseUrl}/api/expenses`, {
+    data: {
+      employee: 'Luca',
+      description: 'Conference ticket',
+      amount: 10000,
+      expenseDate: '2026-09-28',
+    },
+  });
+
+  expect(validResponse.status()).toBe(201);
+
+  const validExpense = await validResponse.json();
+
+  expect(validExpense.status).toBe('DRAFT');
+
+  const invalidResponse = await request.post(`${apiBaseUrl}/api/expenses`, {
+    data: {
+      employee: 'Maria',
+      description: 'Conference ticket',
+      amount: 10000.01,
+      expenseDate: '2026-09-28',
+    },
+  });
+
+  expect(invalidResponse.status()).toBe(400);
+
+  const invalidError = await invalidResponse.json();
+
+  expect(invalidError.errors).toContain('Amount must not exceed £10,000.');
+});
